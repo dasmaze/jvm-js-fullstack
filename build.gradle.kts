@@ -1,6 +1,6 @@
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpack
 
-val kotlinVersion = "1.4.0"
+val kotlinVersion = "1.4.3"
 val serializationVersion = "1.0.0-RC"
 val ktorVersion = "1.4.0"
 
@@ -27,6 +27,11 @@ kotlin {
     js {
         browser {
             binaries.executable()
+        }
+    }
+    jvm().compilations.all {
+        kotlinOptions {
+            useIR = true
         }
     }
     sourceSets {
