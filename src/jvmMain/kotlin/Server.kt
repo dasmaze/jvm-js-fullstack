@@ -1,6 +1,7 @@
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.http.*
+import io.ktor.http.content.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
@@ -42,6 +43,15 @@ fun main() {
                     shoppingList.removeIf { it.id == id }
                     call.respond(HttpStatusCode.NoContent)
                 }
+            }
+            get("/") {
+                call.respondText(
+                    this::class.java.classLoader.getResource("index.html")!!.readText(),
+                    ContentType.Text.Html
+                )
+            }
+            static("/") {
+                resources("")
             }
         }
     }.start(true)
