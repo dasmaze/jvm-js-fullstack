@@ -1,3 +1,4 @@
+import com.mongodb.ConnectionString
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.http.*
@@ -12,12 +13,16 @@ import org.litote.kmongo.coroutine.coroutine
 import org.litote.kmongo.eq
 import org.litote.kmongo.reactivestreams.KMongo
 
-val client = KMongo.createClient().coroutine
-val database = client.getDatabase("shoppingList")
+val connectionString: ConnectionString? = System.getenv("MONGODB_URI")?.let {
+    ConnectionString("$it?retryWrites=false")
+}
+val client = if(connectionString != null) KMongo.createClient(connectionString).coroutine else KMongo.createClient().coroutine
+val database = client.getDatabase(connectionString?.database ?: "shoppingList")
 val collection = database.getCollection<ShoppingListItem>()
 
 fun main() {
-    embeddedServer(Netty, 9090) {
+    val port = System.getenv("PORT")?.toInt() ?: 9090
+    embeddedServer(Netty, port) {
         install(ContentNegotiation) {
             json()
         }
