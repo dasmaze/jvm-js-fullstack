@@ -31,7 +31,8 @@ kotlin {
     }
     jvm().compilations.all {
         kotlinOptions {
-            useIR = true
+            // Deactivated because of https://youtrack.jetbrains.com/issue/KT-43167
+            //useIR = true
         }
     }
     sourceSets {
